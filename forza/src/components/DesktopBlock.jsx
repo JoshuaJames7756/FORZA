@@ -3,7 +3,7 @@
 // Genera un QR code automático apuntando a la URL actual de despliegue
 
 import { useEffect, useRef } from 'react'
-import styles from '../assets/css/modules/DesktopBlock.module.css'
+import styles from '../assets/css/modules/desktopblock.module.css'
 
 export default function DesktopBlock() {
   const qrRef = useRef(null)
