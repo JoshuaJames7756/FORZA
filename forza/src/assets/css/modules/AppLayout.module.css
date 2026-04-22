@@ -2,16 +2,26 @@
 
 .layout {
   width: 100%;
-  min-height: 100dvh;
+  /* Forzamos a que la pantalla NO crezca más allá de lo que ves */
+  height: 100dvh; 
   background: var(--color-bg);
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Clave: evita el scroll de la página entera */
 }
 
 .main {
   width: 100%;
-  /* Padding inferior para que el contenido no quede tapado por el BottomNav */
-  padding-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom) + 1rem);
-  /* Max width centrado para pantallas más grandes dentro del límite móvil */
+  flex: 1; /* Toma todo el espacio disponible */
+  overflow-y: auto; /* El scroll ahora sucede SOLO aquí dentro */
+  
+  /* Ya no necesitas el padding-bottom gigante porque el Nav no flota encima, 
+     sino que ocupa su propio espacio abajo en el flexbox */
+  padding-bottom: 2rem; 
+  
   max-width: 480px;
   margin: 0 auto;
+  
+  /* Scroll suave para móviles */
+  -webkit-overflow-scrolling: touch;
 }
