@@ -1,0 +1,204 @@
+/* src/assets/css/modules/Calendar.module.css */
+
+.page { padding: 1.5rem 1.25rem 0; position: relative; }
+
+/* TOAST */
+.toast {
+  position: fixed; top: 1.25rem; left: 50%; transform: translateX(-50%);
+  background: var(--color-primary); color: var(--color-bg);
+  font-size: 0.82rem; font-weight: 700; padding: 0.5rem 1.25rem;
+  border-radius: 100px; z-index: 200;
+  animation: fadeUp 0.2s ease;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* HEADER */
+.header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.pageTag {
+  font-size: 0.65rem; color: var(--color-primary); text-transform: uppercase;
+  letter-spacing: 0.15em; font-weight: 600; margin-bottom: 0.2rem;
+}
+.title {
+  font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; line-height: 1;
+}
+.weekToggle { display: flex; gap: 6px; margin-top: 0.25rem; }
+.weekBtn {
+  font-size: 0.72rem; font-weight: 700; padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-md); border: 1px solid var(--color-border);
+  background: transparent; color: var(--color-muted); cursor: pointer;
+  transition: all 0.15s;
+}
+.weekBtnActive { background: var(--color-primary); color: var(--color-bg); border-color: var(--color-primary); }
+
+.hint { font-size: 0.8rem; color: var(--color-muted); margin-bottom: 1.25rem; }
+
+/* SKELETON */
+.skeletonGrid { display: flex; flex-direction: column; gap: 10px; }
+.skeleton { height: 72px; background: var(--color-surface); border-radius: var(--radius-lg); animation: pulse 1.2s ease infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
+
+/* DAY GRID */
+.grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
+
+.dayCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 0.875rem 1rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.18s, transform 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.dayCard:active { transform: scale(0.985); }
+
+/* Type colors — left border */
+.day_routine { border-left-color: var(--color-primary); }
+.day_rest    { border-left-color: #555; }
+.day_cardio  { border-left-color: #00cfff; }
+.dayToday    { background: rgba(204,255,0,0.04); }
+
+.dayTop { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.dayName {
+  font-family: var(--font-display); font-size: 1rem; font-weight: 800;
+  color: var(--color-muted); line-height: 1; min-width: 30px; text-align: center;
+}
+.dayNameActive { color: var(--color-primary); }
+.todayPill {
+  font-size: 0.52rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  background: rgba(204,255,0,0.12); color: var(--color-primary);
+  padding: 1px 5px; border-radius: 100px;
+}
+.dayIcon { font-size: 1.3rem; justify-self: center; }
+.dayLabel {
+  font-size: 0.82rem; font-weight: 600; color: var(--color-white);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  justify-self: end; text-align: right;
+}
+
+/* LEGEND */
+.legend {
+  display: flex; gap: 1.25rem; margin-bottom: 1.25rem; flex-wrap: wrap;
+}
+.legendItem { display: flex; align-items: center; gap: 5px; }
+.legendDot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.ldot_routine { background: var(--color-primary); }
+.ldot_rest    { background: #555; }
+.ldot_cardio  { background: #00cfff; }
+.legendLabel  { font-size: 0.72rem; color: var(--color-muted); }
+
+/* SUMMARY */
+.summary {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 1.5rem;
+}
+.summaryItem {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); padding: 0.75rem 0.5rem;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.summaryNum {
+  font-family: var(--font-display); font-size: 1.6rem; font-weight: 900;
+  color: var(--color-white); line-height: 1;
+}
+.summaryLabel { font-size: 0.58rem; color: var(--color-muted); text-align: center; }
+
+/* ── MODAL BOTTOM SHEET ── */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+  z-index: 150; display: flex; align-items: flex-end;
+}
+.sheet {
+  background: #161616; border-top: 1px solid var(--color-border);
+  border-radius: 20px 20px 0 0; width: 100%; max-width: 480px; margin: 0 auto;
+  padding: 0 1.25rem 2.5rem;
+  animation: slideUp 0.25s ease;
+  max-height: 85dvh; overflow-y: auto;
+}
+@keyframes slideUp {
+  from { transform: translateY(60px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.sheetHandle {
+  width: 36px; height: 4px; border-radius: 2px; background: var(--color-border);
+  margin: 0.75rem auto 1.25rem;
+}
+.sheetTitle {
+  font-family: var(--font-display); font-size: 1.7rem; font-weight: 900;
+  margin-bottom: 1.25rem; line-height: 1;
+}
+.sheetWeek { font-size: 1.1rem; color: var(--color-muted); }
+.sheetLabel {
+  display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.6rem;
+}
+
+/* TYPE GRID */
+.typeGrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 1.25rem; }
+.typeBtn {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); padding: 0.875rem 0.5rem;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  cursor: pointer; transition: border-color 0.15s, background 0.15s;
+}
+.typeBtn:active { transform: scale(0.96); }
+.typeBtnActive { border-color: var(--color-primary); background: rgba(204,255,0,0.07); }
+.typeBtnIcon { font-size: 1.3rem; }
+.typeBtnLabel { font-size: 0.72rem; font-weight: 600; color: var(--color-white); }
+
+/* ROUTINE LIST */
+.routineScroll {
+  display: flex; flex-direction: column; gap: 6px; margin-bottom: 1.25rem;
+  max-height: 220px; overflow-y: auto;
+}
+.routineRow {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); padding: 0.75rem 1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+  cursor: pointer; transition: border-color 0.15s;
+  text-align: left;
+}
+.routineRowActive { border-color: var(--color-primary); background: rgba(204,255,0,0.06); }
+.routineRowName { flex: 1; font-size: 0.875rem; font-weight: 600; color: var(--color-white); }
+.templateBadge {
+  font-size: 0.6rem; font-weight: 700; color: var(--color-muted);
+  background: var(--color-bg); border: 1px solid var(--color-border);
+  padding: 2px 6px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.08em;
+}
+.routineCheck { color: var(--color-primary); font-size: 0.9rem; font-weight: 700; }
+.emptyRoutines { font-size: 0.85rem; color: var(--color-muted); margin-bottom: 1rem; }
+
+/* SHEET ACTIONS */
+.sheetActions { display: flex; flex-direction: column; gap: 8px; }
+.saveBtn {
+  background: var(--color-primary); color: var(--color-bg);
+  font-family: var(--font-base); font-size: 0.9rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 1rem; border-radius: var(--radius-md); border: none;
+  width: 100%; cursor: pointer; min-height: 50px;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.15s;
+}
+.saveBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.clearBtn {
+  background: transparent; border: 1px solid var(--color-border);
+  color: var(--color-muted); font-size: 0.85rem; font-weight: 600;
+  padding: 0.75rem; border-radius: var(--radius-md); cursor: pointer; width: 100%;
+}
+.spinner {
+  width: 18px; height: 18px; border: 2px solid rgba(15,15,15,0.3);
+  border-top-color: var(--color-bg); border-radius: 50%;
+  animation: spin 0.7s linear infinite; display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }

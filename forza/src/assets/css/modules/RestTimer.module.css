@@ -1,0 +1,127 @@
+/* src/assets/css/modules/RestTimer.module.css */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+}
+
+/* RING */
+.ringWrap {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeDisplay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.time {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--color-white);
+  line-height: 1;
+  transition: color 0.3s;
+}
+
+.timeWarning { color: #ffaa00; }
+
+.finishedText {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.idleText {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--color-border);
+  line-height: 1;
+}
+
+.timeLabel {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-muted);
+}
+
+/* PRESETS */
+.presets {
+  display: flex;
+  gap: 6px;
+}
+
+.presetBtn {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.presetBtn:active { transform: scale(0.95); }
+
+.presetActive {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: rgba(204,255,0,0.08);
+}
+
+/* CONTROLS */
+.controls {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.ctrlBtn {
+  flex: 1;
+  background: var(--color-primary);
+  color: var(--color-bg);
+  font-family: var(--font-base);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.ctrlBtn:active { transform: scale(0.97); }
+
+.ctrlBtnGhost {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}

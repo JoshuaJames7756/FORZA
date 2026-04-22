@@ -1,0 +1,238 @@
+/* src/assets/css/modules/Workout.module.css */
+
+.page { padding: 1.25rem 1.25rem 2rem; }
+
+/* HEADER — SELECT VIEW */
+.header { margin-bottom: 1.75rem; }
+.pageTag {
+  font-size: 0.65rem; color: var(--color-primary); text-transform: uppercase;
+  letter-spacing: 0.15em; font-weight: 600; margin-bottom: 0.2rem;
+}
+.title {
+  font-family: var(--font-display); font-size: 2.8rem; font-weight: 900; line-height: 1;
+}
+.accent { color: var(--color-primary); }
+
+/* SKELETON */
+.skeletonList { display: flex; flex-direction: column; gap: 10px; }
+.skeleton { height: 72px; background: var(--color-surface); border-radius: var(--radius-lg); animation: pulse 1.2s ease infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
+
+/* ROUTINE LIST - MEJORA: Degradado sutil */
+.routineList { display: flex; flex-direction: column; gap: 8px; }
+.routineCard {
+  background: linear-gradient(90deg, rgba(204, 255, 0, 0.03) 0%, var(--color-surface) 100%);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-primary); 
+  border-radius: var(--radius-lg);
+  padding: 1.1rem; display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; transition: all 0.2s ease;
+}
+.routineCard:active { transform: scale(0.97); }
+
+.routineCardLeft { display: flex; align-items: center; gap: 0.875rem; }
+.routineCardIcon { font-size: 1.4rem; filter: drop-shadow(0 0 5px rgba(204, 255, 0, 0.2)); }
+.routineCardName { font-size: 0.95rem; font-weight: 700; color: var(--color-white); margin-bottom: 2px; }
+.templateTag {
+  font-size: 0.6rem; font-weight: 800; color: var(--color-primary); background: rgba(204, 255, 0, 0.1);
+  border: 1px solid rgba(204, 255, 0, 0.2); padding: 2px 8px; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.routineCardArrow { color: var(--color-primary); font-size: 1.1rem; font-weight: 700; opacity: 0.7; }
+
+.emptyState { text-align: center; padding: 3rem 0; }
+.emptyIcon  { font-size: 3rem; display: block; margin-bottom: 0.75rem; }
+.emptyText  { font-size: 0.9rem; color: var(--color-muted); }
+
+/* ── ACTIVE WORKOUT ── */
+.activeTop {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.activeRoutineName { font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; line-height: 1; }
+.activeProgress    { font-size: 0.75rem; color: var(--color-muted); margin-top: 2px; }
+
+/* MEJORA: Botón finalizar más limpio */
+.finishEarlyBtn {
+  background: rgba(255, 80, 80, 0.1); 
+  border: 1px solid rgba(255, 80, 80, 0.3); 
+  color: #ff5050;
+  font-size: 0.7rem; font-weight: 800; padding: 0.45rem 0.75rem;
+  border-radius: var(--radius-sm); cursor: pointer;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+/* PROGRESS BAR */
+.progressBar {
+  height: 4px; background: var(--color-border); border-radius: 100px; margin-bottom: 1.25rem; overflow: hidden;
+}
+.progressFill {
+  height: 100%; background: var(--color-primary); border-radius: 100px;
+  box-shadow: 0 0 10px rgba(204, 255, 0, 0.4);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* EX TABS */
+.exTabs {
+  display: flex; gap: 8px; overflow-x: auto; margin-bottom: 1.25rem;
+  padding-bottom: 8px; scrollbar-width: none;
+}
+.exTabs::-webkit-scrollbar { display: none; }
+.exTab {
+  min-width: 38px; height: 38px; border-radius: 50%;
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  color: var(--color-muted); font-size: 0.85rem; font-weight: 800;
+  cursor: pointer; flex-shrink: 0; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.exTabActive { 
+  background: var(--color-primary); color: var(--color-bg); border-color: var(--color-primary); 
+  transform: scale(1.1); box-shadow: 0 0 15px rgba(204, 255, 0, 0.2);
+}
+.exTabDone   { background: rgba(204,255,0,0.1); color: var(--color-primary); border-color: rgba(204,255,0,0.4); }
+
+/* EXERCISE CARD */
+.exCard {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem;
+}
+.exHeader {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+.exMuscle {
+  font-size: 0.65rem; color: var(--color-primary); text-transform: uppercase;
+  letter-spacing: 0.15em; font-weight: 700; margin-bottom: 4px;
+}
+.exName {
+  font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; line-height: 1.1; margin-bottom: 4px;
+}
+.exTarget { font-size: 0.75rem; color: var(--color-muted); font-weight: 500; }
+
+.exDoneCount { text-align: right; line-height: 1; }
+.exDoneNum  { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; color: var(--color-primary); }
+.exDoneTotal{ font-size: 1rem; color: var(--color-muted); font-weight: 700; }
+
+/* SET LIST - MEJORA: Grid exacto para alineación perfecta */
+.setList { display: flex; flex-direction: column; gap: 4px; }
+.setRow {
+  display: grid; 
+  grid-template-columns: 30px 1.2fr 1fr 1fr 45px; /* Proporciones fijas */
+  align-items: center; 
+  gap: 8px;
+  padding: 0.5rem 0.4rem;
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+}
+.setRowDone { 
+  background: rgba(204, 255, 0, 0.06); 
+  border: 1px solid rgba(204, 255, 0, 0.1);
+}
+
+.setColLabel {
+  font-size: 0.55rem; color: var(--color-muted); text-transform: uppercase;
+  letter-spacing: 0.1em; text-align: center; font-weight: 800;
+  padding-bottom: 4px;
+}
+
+.setNum   { font-size: 0.9rem; font-weight: 900; color: var(--color-muted); text-align: center; }
+.setPrev  { font-size: 0.75rem; color: #777; text-align: center; font-weight: 600; }
+
+/* INPUTS - MEJORA: Más grandes y fáciles de tocar */
+.setInput {
+  background: rgba(0, 0, 0, 0.2); border: 1px solid var(--color-border);
+  border-radius: 8px; color: var(--color-white);
+  font-family: var(--font-display); font-size: 1rem; font-weight: 700;
+  padding: 0.6rem 0.25rem; width: 100%; text-align: center;
+  outline: none; -webkit-appearance: none;
+  transition: all 0.2s;
+}
+.setInput:focus { border-color: var(--color-primary); background: rgba(0,0,0,0.4); box-shadow: 0 0 0 2px rgba(204, 255, 0, 0.1); }
+.setInput:disabled { opacity: 0.4; border-style: dashed; }
+
+.setDoneBtn {
+  width: 38px; height: 38px; border-radius: 12px; /* Un toque más cuadrado/moderno */
+  border: 2px solid var(--color-border); background: transparent;
+  color: var(--color-muted); font-size: 1.1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.setDoneBtn:active { transform: scale(0.85); }
+
+.setDoneBtnDone {
+  border-color: var(--color-primary); background: var(--color-primary);
+  color: var(--color-bg); font-weight: 900;
+  box-shadow: 0 4px 10px rgba(204, 255, 0, 0.3);
+}
+
+/* EX NAV */
+.exNav { display: flex; gap: 10px; margin: 1rem 0; }
+.exNavBtn {
+  flex: 1; background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); color: var(--color-white);
+  font-size: 0.85rem; font-weight: 700; padding: 0.85rem; cursor: pointer;
+  transition: all 0.2s;
+}
+.exNavBtn:active:not(:disabled) { background: var(--color-border); }
+.exNavBtn:disabled { opacity: 0.2; }
+.exNavBtnNext { 
+  background: rgba(204, 255, 0, 0.05);
+  border: 1px solid var(--color-primary); 
+  color: var(--color-primary); 
+}
+
+/* TIMER TOGGLE - MEJORA: Se ve más como un botón de acción */
+.timerToggle {
+  background: rgba(255, 255, 255, 0.03); 
+  border: 1px solid var(--color-border);
+  color: var(--color-white); 
+  font-size: 0.85rem; font-weight: 700;
+  padding: 0.8rem; border-radius: var(--radius-md); cursor: pointer;
+  width: 100%; margin-bottom: 1.5rem; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.timerToggle:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+/* FINISH BTN BOTTOM */
+.finishBtnBottom {
+  width: 100%; background: var(--color-primary);
+  border: none; color: var(--color-bg);
+  font-family: var(--font-base); font-size: 0.95rem; font-weight: 800;
+  padding: 1.1rem; border-radius: var(--radius-md); cursor: pointer;
+  margin-top: 1rem; transition: all 0.2s;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+.finishBtnBottom:active { transform: translateY(2px); box-shadow: none; }
+.finishBtnBottom:disabled { opacity: 0.5; filter: grayscale(1); }
+
+/* ── FINISH VIEW ── */
+.finishWrapper {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; min-height: 80dvh; text-align: center; padding: 2rem;
+}
+.finishIcon { font-size: 5rem; margin-bottom: 1.5rem; filter: drop-shadow(0 0 15px rgba(204,255,0,0.3)); }
+.finishTitle {
+  font-family: var(--font-display); font-size: 3.2rem; font-weight: 900;
+  line-height: 0.9; margin-bottom: 2.5rem;
+}
+.finishStats {
+  display: flex; gap: 1rem; margin-bottom: 3rem; width: 100%;
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl); padding: 1.5rem 1rem;
+}
+.finishStat { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.finishStatNum {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 900;
+  color: var(--color-primary); line-height: 1;
+}
+.finishStatLabel { font-size: 0.6rem; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
+
+.finishBtn {
+  width: 100%; max-width: 280px;
+  background: var(--color-primary); color: var(--color-bg);
+  font-family: var(--font-base); font-size: 1rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  padding: 1.1rem 2rem; border-radius: var(--radius-md); border: none; cursor: pointer;
+  box-shadow: 0 8px 15px rgba(204, 255, 0, 0.2);
+}
