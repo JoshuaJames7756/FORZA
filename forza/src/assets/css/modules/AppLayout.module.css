@@ -1,27 +1,18 @@
-/* src/assets/css/modules/AppLayout.module.css */
-
 .layout {
   width: 100%;
-  /* Forzamos a que la pantalla NO crezca más allá de lo que ves */
-  height: 100dvh; 
-  background: var(--color-bg);
+  height: 100dvh; /* Altura dinámica para móviles */
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Clave: evita el scroll de la página entera */
+  overflow: hidden;
+  background: var(--color-bg);
 }
 
 .main {
-  width: 100%;
-  flex: 1; /* Toma todo el espacio disponible */
-  overflow-y: auto; /* El scroll ahora sucede SOLO aquí dentro */
-  
-  /* Ya no necesitas el padding-bottom gigante porque el Nav no flota encima, 
-     sino que ocupa su propio espacio abajo en el flexbox */
-  padding-bottom: 2rem; 
-  
-  max-width: 480px;
-  margin: 0 auto;
-  
-  /* Scroll suave para móviles */
+  flex: 1;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  
+  /* ESTA ES LA CLAVE: */
+  /* Añadimos un espacio al final de TODO el contenido */
+  padding-bottom: var(--bottom-nav-h); 
 }

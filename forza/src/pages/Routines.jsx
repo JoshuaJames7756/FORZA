@@ -1,4 +1,3 @@
-// src/pages/Routines.jsx
 import { useEffect, useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { supabaseAuth } from '../lib/supabase'
@@ -531,8 +530,12 @@ function RoutineCard({ routine, isTemplate, onEdit, onDelete, onClone, cloning }
       <div className={styles.routineCardMain} onClick={() => !isTemplate && setOpen(p => !p)}>
         <div className={styles.routineCardLeft}>
           <span className={styles.routineCardIcon}>{isTemplate ? '📋' : '⚡'}</span>
-          <div>
+          <div className={styles.routineInfo}> {/* Contenedor para info y badge */}
             <p className={styles.routineCardName}>{routine.name}</p>
+            
+            {/* Badge de PLANTILLA alineado a la izquierda */}
+            {isTemplate && <span className={styles.plantillaBadge}>PLANTILLA</span>}
+            
             {routine.description && (
               <p className={styles.routineCardDesc}>{routine.description}</p>
             )}
@@ -540,7 +543,7 @@ function RoutineCard({ routine, isTemplate, onEdit, onDelete, onClone, cloning }
         </div>
         {isTemplate ? (
           <button className={styles.cloneBtn} onClick={onClone} disabled={cloning}>
-            {cloning ? '...' : 'Clonar'}
+            {cloning ? '...' : '→'}
           </button>
         ) : (
           <span className={styles.routineCardChevron}>{open ? '▲' : '▼'}</span>

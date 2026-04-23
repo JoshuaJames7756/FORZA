@@ -1,4 +1,3 @@
-// src/pages/Progress.jsx
 import { useEffect, useState, useRef } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { supabaseAuth } from '../lib/supabase'
@@ -17,29 +16,29 @@ const TABS = ['Peso', 'Medidas', 'Fotos', 'Sesiones']
 
 export default function Progress() {
   const { profile } = useAuth()
-  const [tab,          setTab]          = useState(0)
+  const [tab, setTab] = useState(0)
 
   // Weight
-  const [weightLogs,   setWeightLogs]   = useState([])
-  const [newWeight,    setNewWeight]    = useState('')
+  const [weightLogs, setWeightLogs] = useState([])
+  const [newWeight, setNewWeight] = useState('')
 
   // Measurements
   const [measurements, setMeasurements] = useState([])
-  const [newMeasure,   setNewMeasure]   = useState({})
+  const [newMeasure, setNewMeasure] = useState({})
   const [showMeasureForm, setShowMeasureForm] = useState(false)
 
   // Photos
-  const [photos,       setPhotos]       = useState([])
-  const [uploading,    setUploading]    = useState(false)
-  const [photoAngle,   setPhotoAngle]   = useState('front')
+  const [photos, setPhotos] = useState([])
+  const [uploading, setUploading] = useState(false)
+  const [photoAngle, setPhotoAngle] = useState('front')
   const fileRef = useRef(null)
 
   // Sessions
-  const [sessions,     setSessions]     = useState([])
+  const [sessions, setSessions] = useState([])
 
-  const [loading,      setLoading]      = useState(true)
-  const [saving,       setSaving]       = useState(false)
-  const [toast,        setToast]        = useState('')
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [toast, setToast] = useState('')
 
   const today = new Date().toISOString().split('T')[0]
 
@@ -60,7 +59,6 @@ export default function Progress() {
     setLoading(false)
   }
 
-  // ── Weight ─────────────────────────────────────────────
   async function logWeight() {
     if (!newWeight || !profile?.id) return
     setSaving(true)
@@ -68,7 +66,6 @@ export default function Progress() {
       user_id: profile.id, weight_kg: parseFloat(newWeight), logged_at: today
     }, { onConflict: 'user_id,logged_at' })
     if (!error) {
-      // Actualizar peso en perfil
       await supabaseAuth.from('profiles').update({ weight_kg: parseFloat(newWeight) }).eq('id', profile.id)
       await loadAll(profile.id)
       showToast('✓ Peso registrado')
@@ -77,7 +74,6 @@ export default function Progress() {
     setSaving(false)
   }
 
-  // ── Measurements ───────────────────────────────────────
   async function saveMeasurement() {
     if (!profile?.id) return
     setSaving(true)
@@ -91,14 +87,13 @@ export default function Progress() {
     setSaving(false)
   }
 
-  // ── Photos ─────────────────────────────────────────────
   async function uploadPhoto(e) {
     const file = e.target.files[0]
     if (!file || !profile?.id) return
     setUploading(true)
-    const ext      = file.name.split('.').pop()
+    const ext = file.name.split('.').pop()
     const filename = `${Date.now()}.${ext}`
-    const path     = `${profile.id}/${filename}`
+    const path = `${profile.id}/${filename}`
 
     const { error: uploadErr } = await supabaseAuth.storage
       .from('progress-photos')
@@ -118,13 +113,12 @@ export default function Progress() {
 
   function showToast(msg) { setToast(msg); setTimeout(() => setToast(''), 2200) }
 
-  // ── Peso: mini sparkline SVG ───────────────────────────
   function Sparkline({ data }) {
     if (data.length < 2) return null
-    const vals    = [...data].reverse().map(d => d.weight_kg)
-    const min     = Math.min(...vals)
-    const max     = Math.max(...vals)
-    const range   = max - min || 1
+    const vals = [...data].reverse().map(d => d.weight_kg)
+    const min = Math.min(...vals)
+    const max = Math.max(...vals)
+    const range = max - min || 1
     const W = 200, H = 40
     const pts = vals.map((v, i) => {
       const x = (i / (vals.length - 1)) * W
@@ -140,17 +134,14 @@ export default function Progress() {
   }
 
   return (
-    <div className={styles.page}>
-
+    <div className="page-container"> {/* MEJORA: Clase global para centrado móvil */}
       {toast && <div className={styles.toast}>{toast}</div>}
 
-      {/* HEADER */}
       <header className={styles.header}>
-        <p className={styles.pageTag}>Tu evolución</p>
+        <p className="accent">Tu evolución</p>
         <h1 className={styles.title}>Progreso</h1>
       </header>
 
-      {/* TABS */}
       <div className={styles.tabs}>
         {TABS.map((t, i) => (
           <button key={t}
@@ -166,37 +157,34 @@ export default function Progress() {
         </div>
       ) : (
         <>
-          {/* ── TAB 0: PESO ── */}
           {tab === 0 && (
             <div className={styles.tabContent}>
-              {/* Registro */}
-              <div className={styles.inputRow}>
-                <input type="number" className={styles.weightInput}
-                  placeholder="Ej: 78.5" value={newWeight}
-                  onChange={e => setNewWeight(e.target.value)} inputMode="decimal"
-                />
-                <span className={styles.weightUnit}>kg</span>
-                <button className={styles.logBtn} onClick={logWeight} disabled={saving || !newWeight}>
-                  {saving ? '...' : 'Registrar'}
+              {/* MEJORA: Contenedor flexible para que el botón no se salga */}
+              <div className="registration-group">
+                <div style={{ position: 'relative' }}>
+                  <input type="number" className="input-field"
+                    placeholder="Ej: 78.5" value={newWeight}
+                    onChange={e => setNewWeight(e.target.value)} inputMode="decimal"
+                  />
+                  <span style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-muted)' }}>kg</span>
+                </div>
+                <button className="btn-primary" onClick={logWeight} disabled={saving || !newWeight}>
+                  {saving ? '...' : 'REGISTRAR'}
                 </button>
               </div>
 
-              {/* Sparkline */}
               {weightLogs.length >= 2 && (
                 <div className={styles.sparkCard}>
                   <div className={styles.sparkHeader}>
                     <span className={styles.sparkLabel}>Últimas {weightLogs.length} entradas</span>
                     <span className={styles.sparkDelta}>
-                      {weightLogs.length >= 2
-                        ? `${(weightLogs[0].weight_kg - weightLogs[weightLogs.length - 1].weight_kg) > 0 ? '+' : ''}${(weightLogs[0].weight_kg - weightLogs[weightLogs.length - 1].weight_kg).toFixed(1)} kg`
-                        : ''}
+                      {`${(weightLogs[0].weight_kg - weightLogs[weightLogs.length - 1].weight_kg) > 0 ? '+' : ''}${(weightLogs[0].weight_kg - weightLogs[weightLogs.length - 1].weight_kg).toFixed(1)} kg`}
                     </span>
                   </div>
                   <Sparkline data={weightLogs} />
                 </div>
               )}
 
-              {/* Log list */}
               <div className={styles.logList}>
                 {weightLogs.length === 0
                   ? <p className={styles.emptyText}>Sin registros de peso aún.</p>
@@ -211,10 +199,9 @@ export default function Progress() {
             </div>
           )}
 
-          {/* ── TAB 1: MEDIDAS ── */}
           {tab === 1 && (
             <div className={styles.tabContent}>
-              <button className={styles.addBtn} onClick={() => setShowMeasureForm(p => !p)}>
+              <button className="btn-primary" onClick={() => setShowMeasureForm(p => !p)} style={{ marginBottom: '1rem', background: 'transparent', border: '1px solid var(--color-border)', color: 'white' }}>
                 {showMeasureForm ? 'Cancelar' : '＋ Registrar medidas hoy'}
               </button>
 
@@ -224,7 +211,7 @@ export default function Progress() {
                     {MEASUREMENT_FIELDS.map(f => (
                       <div key={f.key} className={styles.measureField}>
                         <label className={styles.measureLabel}>{f.label} (cm)</label>
-                        <input type="number" className={styles.measureInput}
+                        <input type="number" className="input-field"
                           placeholder="—"
                           value={newMeasure[f.key] || ''}
                           onChange={e => setNewMeasure(p => ({ ...p, [f.key]: e.target.value }))}
@@ -233,7 +220,7 @@ export default function Progress() {
                       </div>
                     ))}
                   </div>
-                  <button className={styles.logBtn} onClick={saveMeasurement} disabled={saving}>
+                  <button className="btn-primary" onClick={saveMeasurement} disabled={saving} style={{ marginTop: '1rem' }}>
                     {saving ? 'Guardando...' : 'Guardar medidas'}
                   </button>
                 </div>
@@ -259,7 +246,6 @@ export default function Progress() {
             </div>
           )}
 
-          {/* ── TAB 2: FOTOS ── */}
           {tab === 2 && (
             <div className={styles.tabContent}>
               <div className={styles.photoControls}>
@@ -274,7 +260,7 @@ export default function Progress() {
                   ))}
                 </div>
                 <input type="file" accept="image/*" ref={fileRef} style={{ display: 'none' }} onChange={uploadPhoto} />
-                <button className={styles.addBtn} onClick={() => fileRef.current?.click()} disabled={uploading}>
+                <button className="btn-primary" onClick={() => fileRef.current?.click()} disabled={uploading} style={{ marginTop: '1rem' }}>
                   {uploading ? 'Subiendo...' : '📷 Subir foto'}
                 </button>
               </div>
@@ -297,7 +283,6 @@ export default function Progress() {
             </div>
           )}
 
-          {/* ── TAB 3: SESIONES ── */}
           {tab === 3 && (
             <div className={styles.tabContent}>
               {sessions.length === 0 ? (

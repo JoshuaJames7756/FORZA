@@ -1,6 +1,12 @@
 /* src/assets/css/modules/Routines.module.css */
 
-.page { padding: 1.5rem 1.25rem 0; position: relative; }
+.page { 
+  padding: 1.5rem 1.25rem 0; 
+  position: relative; 
+  /* Fix de scroll: El contenido termina antes del menú inferior */
+  padding-bottom: calc(var(--bottom-nav-h) + 2rem); 
+  min-height: 100dvh;
+}
 
 .toast {
   position: fixed; top: 1.25rem; left: 50%; transform: translateX(-50%);
@@ -9,6 +15,7 @@
   border-radius: 100px; z-index: 300;
   animation: fadeUp 0.2s ease;
 }
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateX(-50%) translateY(6px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -67,14 +74,40 @@
   display: flex; align-items: center; justify-content: space-between;
   padding: 1rem 1.1rem; cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  gap: 12px;
 }
-.routineCardLeft { display: flex; align-items: center; gap: 0.875rem; flex: 1; min-width: 0; }
-.routineCardIcon { font-size: 1.3rem; flex-shrink: 0; }
+.routineCardLeft { display: flex; align-items: flex-start; gap: 0.875rem; flex: 1; min-width: 0; }
+.routineCardIcon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+
+/* FIX ALINEACIÓN: Contenedor de info para alinear badge y texto */
+.routineInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
 .routineCardName {
   font-size: 0.9rem; font-weight: 700; color: var(--color-white);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.routineCardDesc { font-size: 0.72rem; color: var(--color-muted); margin-top: 2px; }
+
+/* FIX ALINEACIÓN: Badge de Plantilla */
+.plantillaBadge {
+  background: rgba(204, 255, 0, 0.1); 
+  color: #CCFF00; 
+  border: 1px solid #CCFF00;
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-left: 0;
+}
+
+.routineCardDesc { font-size: 0.72rem; color: var(--color-muted); line-height: 1.2; }
 .routineCardChevron { color: var(--color-muted); font-size: 0.7rem; flex-shrink: 0; }
 
 .cloneBtn {
@@ -105,19 +138,20 @@
   z-index: 200; display: flex; align-items: flex-end;
 }
 
-/* ARREGLO DE SCROLL: Padding inferior aumentado para llegar al botón verde */
 .sheet {
   background: #161616; border-top: 1px solid var(--color-border);
   border-radius: 20px 20px 0 0; width: 100%; max-width: 480px; margin: 0 auto;
-  padding: 0 1.25rem 4rem; /* Aumentado de 2.5rem a 4rem */
+  padding: 0 1.25rem calc(var(--bottom-nav-h) + 2rem); 
   max-height: 92dvh; overflow-y: auto;
   animation: slideUp 0.25s ease;
-  -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+  -webkit-overflow-scrolling: touch; 
 }
+
 @keyframes slideUp {
   from { transform: translateY(60px); opacity: 0; }
   to   { transform: translateY(0); opacity: 1; }
 }
+
 .sheetHandle { width: 36px; height: 4px; border-radius: 2px; background: var(--color-border); margin: 0.75rem auto 1.25rem; }
 .sheetTitle  { font-family: var(--font-display); font-size: 1.7rem; font-weight: 900; margin-bottom: 1.25rem; line-height: 1; }
 .sheetLabel  { display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.5rem; }
@@ -128,7 +162,6 @@
   width: 100%; outline: none; margin-bottom: 1rem; transition: border-color 0.15s;
 }
 .sheetInput:focus { border-color: var(--color-primary); }
-.sheetInput::placeholder { color: #444; }
 
 /* EX LIST HEADER */
 .exListHeader {
@@ -136,7 +169,6 @@
   margin-bottom: 0.75rem;
 }
 
-/* MEJORA VISUAL: Botón + Agregar notable */
 .addExBtn {
   background: rgba(204, 255, 0, 0.1); 
   border: 1px solid var(--color-primary); 
@@ -155,7 +187,6 @@
 /* EXERCISE BUILDER LIST */
 .exBuilderList { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.25rem; }
 
-/* MEJORA ALINEACIÓN: Fila centrada para que el número 1 quede bien con el nombre */
 .exBuilderRow  {
   display: flex; align-items: center; gap: 12px;
   background: var(--color-bg); border: 1px solid var(--color-border);
@@ -168,9 +199,7 @@
 .moveBtn {
   background: none; border: none; color: var(--color-muted); font-size: 0.6rem;
   cursor: pointer; padding: 2px; line-height: 1;
-  transition: color 0.15s;
 }
-.moveBtn:hover   { color: var(--color-primary); }
 .moveBtn:disabled{ opacity: 0.2; cursor: not-allowed; }
 .exBuilderNum { font-size: 0.85rem; font-weight: 900; color: var(--color-primary); }
 
@@ -186,18 +215,12 @@
   border-radius: 6px; color: var(--color-white);
   font-family: var(--font-display); font-size: 0.95rem; font-weight: 700;
   padding: 0.35rem 0.25rem; text-align: center; width: 100%; outline: none;
-  -webkit-appearance: none;
-  transition: border-color 0.15s;
 }
-.exParamInput:focus { border-color: var(--color-primary); }
-.exParamInput[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
 
 .removeExBtn {
   background: none; border: none; color: var(--color-muted); font-size: 0.75rem;
   cursor: pointer; padding: 2px; flex-shrink: 0;
-  transition: color 0.15s;
 }
-.removeExBtn:hover { color: #ff5050; }
 
 /* SAVE BTN */
 .saveBtn {
@@ -206,10 +229,9 @@
   text-transform: uppercase; letter-spacing: 0.05em;
   padding: 1rem; border-radius: var(--radius-md); border: none; cursor: pointer;
   min-height: 50px; display: flex; align-items: center; justify-content: center;
-  transition: opacity 0.15s;
-  margin-top: 0.5rem; /* Separación extra */
+  margin-top: 0.5rem;
 }
-.saveBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
 .spinner {
   width: 18px; height: 18px; border: 2px solid rgba(15,15,15,0.3);
   border-top-color: var(--color-bg); border-radius: 50%;
@@ -235,39 +257,26 @@
   display: flex; align-items: center; justify-content: space-between;
   background: var(--color-bg); border: 1px solid var(--color-border);
   border-radius: var(--radius-md); padding: 0.75rem 1rem;
-  cursor: pointer; text-align: left; transition: border-color 0.15s;
+  cursor: pointer; text-align: left;
 }
-.exPickRow:hover { border-color: var(--color-primary); }
 .exPickRow:disabled { opacity: 0.45; cursor: not-allowed; }
 .exPickMuscle { font-size: 0.6rem; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; margin-bottom: 2px; }
 .exPickName   { font-size: 0.875rem; font-weight: 600; color: var(--color-white); }
 .exPickAdd    { font-size: 1rem; color: var(--color-primary); font-weight: 700; flex-shrink: 0; }
 
 .createExBtn {
-  width: 100%;
-  margin-top: 12px;
-  padding: 12px;
-  background: transparent;
-  border: 1px dashed #CCFF00;
-  border-radius: 10px;
-  color: #CCFF00;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
+  width: 100%; margin-top: 12px; padding: 12px;
+  background: transparent; border: 1px dashed #CCFF00;
+  border-radius: 10px; color: #CCFF00;
+  font-size: 0.9rem; font-weight: 600; cursor: pointer;
 }
 
 .backBtn {
-  background: none;
-  border: none;
-  color: #888;
-  font-size: 0.9rem;
-  cursor: pointer;
-  margin-bottom: 12px;
-  padding: 0;
+  background: none; border: none; color: #888;
+  font-size: 0.9rem; cursor: pointer;
+  margin-bottom: 12px; padding: 0;
 }
 
 .customBadge {
-  color: #CCFF00;
-  font-size: 0.75rem;
-  font-weight: 600;
+  color: #CCFF00; font-size: 0.75rem; font-weight: 600;
 }

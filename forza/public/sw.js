@@ -4,6 +4,9 @@
 const CACHE_NAME = 'forza-v1';
 const OFFLINE_URL = '/index.html';
 
+// ── PRECACHE generado por vite-plugin-pwa ────────────────────
+self.__WB_MANIFEST  // ← esta línea es obligatoria con injectManifest
+
 // ── INSTALL: Pre-cache de la estructura base ─────────────────
 self.addEventListener('install', event => {
   event.waitUntil(
