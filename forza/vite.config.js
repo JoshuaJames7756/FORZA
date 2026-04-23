@@ -6,16 +6,13 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      // ← Usar el sw.js manual, no generar uno automático
+      // ← Solo maneja el manifest, SIN tocar el SW
       strategies: 'injectManifest',
-      srcDir: 'public',
-      filename: 'sw.js',
-
-      // ← Solo gestiona el manifest, el SW lo controlas tú
+      srcDir: 'src',
+      filename: 'sw-workbox.js',  // ← archivo dummy que crearemos
       injectManifest: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        injectionPoint: undefined, // ← desactiva la inyección
       },
-
       manifest: {
         name: 'Forza',
         short_name: 'Forza',
