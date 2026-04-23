@@ -8,7 +8,7 @@ import styles from '../assets/css/modules/Paywall.module.css'
 const PAYMENT_INFO = {
   method:  'Transferencia / QR Bancario',
   details: '+591 74328155',
-  amount:  'Bs. 250',
+  amount:  'Bs. 180',
   note:    'Incluye tu correo en la transferencia para activación rápida.',
 }
 

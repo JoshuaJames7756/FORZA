@@ -80,8 +80,8 @@ export default function Landing() {
 
         <div className={styles.priceCard}>
           <span className={styles.priceBadge}>Pago Único — Acceso Pro</span>
-          <div className={styles.priceAmount}>$250</div>
-          <p className={styles.pricePeriod}>Un solo pago. Sin suscripción. Sin sorpresas.</p>
+          <div className={styles.priceAmount}>$180</div>
+          <p className={styles.pricePeriod}>Un solo pago. Sin suscripción mensual. Sin sorpresas.</p>
 
           <ul className={styles.priceFeatures}>
             {PRICE_ITEMS.map(item => (
