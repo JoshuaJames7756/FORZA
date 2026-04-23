@@ -1,11 +1,11 @@
-// FORZA — Service Worker v1.1 (Protocolo Maestro v3.1)
+// FORZA — Service Worker v1.2 (Protocolo Maestro v3.1)
 // Estrategia: Stale-While-Revalidate + Push Notifications
 
 const CACHE_NAME = 'forza-v1';
 const OFFLINE_URL = '/index.html';
 
 // ── PRECACHE generado por vite-plugin-pwa ────────────────────
-self.__WB_MANIFEST  // ← esta línea es obligatoria con injectManifest
+const WB_MANIFEST = self.__WB_MANIFEST
 
 // ── INSTALL: Pre-cache de la estructura base ─────────────────
 self.addEventListener('install', event => {
@@ -15,7 +15,6 @@ self.addEventListener('install', event => {
         OFFLINE_URL,
         '/',
         '/manifest.json',
-        // ✅ CORREGIDO: Ruta actualizada a la carpeta icons
         '/icons/icon-192.png',
         '/icons/favicon.ico'
       ]);
@@ -27,7 +26,7 @@ self.addEventListener('install', event => {
 // ── ACTIVATE: Limpieza de caches antiguos ─────────────────────
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys => 
+    caches.keys().then(keys =>
       Promise.all(
         keys.map(key => {
           if (key !== CACHE_NAME) return caches.delete(key);
@@ -61,7 +60,6 @@ self.addEventListener('fetch', event => {
         }
         return networkResponse;
       }).catch(() => {
-        // Fallback para imágenes si fallan
         if (request.destination === 'image') return caches.match('/icons/icon-192.png');
       });
 
@@ -82,13 +80,12 @@ self.addEventListener('push', event => {
   const title = data.title || 'FORZA';
   const options = {
     body: data.body || 'Tu rutina te espera.',
-    // ✅ CORREGIDO: Rutas de iconos actualizadas
     icon: '/icons/icon-192.png',
     badge: '/icons/icon-192.png',
     vibrate: [200, 100, 200],
     data: { url: data.url || '/workout' },
     actions: [
-      { action: 'open', title: 'Entrenar ahora' },
+      { action: 'open',    title: 'Entrenar ahora' },
       { action: 'dismiss', title: 'Más tarde' }
     ],
   };
@@ -96,6 +93,7 @@ self.addEventListener('push', event => {
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
+// ── NOTIFICATION CLICK ────────────────────────────────────────
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   if (event.action === 'dismiss') return;
