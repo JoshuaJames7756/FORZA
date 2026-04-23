@@ -18,9 +18,13 @@ export function usePushNotifications(userId) {
 
   async function checkSubscription() {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) return
-    const reg = await navigator.serviceWorker.ready
-    const sub = await reg.pushManager.getSubscription()
-    setSubscribed(!!sub)
+    try {
+      const reg = await navigator.serviceWorker.ready
+      const sub = await reg.pushManager.getSubscription()
+      setSubscribed(!!sub)
+    } catch (err) {
+      console.error('[FORZA Push] Error checking subscription:', err)
+    }
   }
 
   async function requestPermission() {
@@ -30,25 +34,28 @@ export function usePushNotifications(userId) {
     return result === 'granted'
   }
 
+  /**
+   * @param {string|null} reminderTime - Formato "HH:mm:ss"
+   */
   async function subscribe(reminderTime = null) {
     setLoading(true)
     try {
       const granted = permission === 'granted' || await requestPermission()
-      if (!granted) { setLoading(false); return false }
+      if (!granted) { 
+        setLoading(false)
+        return false 
+      }
 
       const reg = await navigator.serviceWorker.ready
 
       // Obtener o crear suscripción
       let sub = await reg.pushManager.getSubscription()
-      if (!sub) {
-        // NOTA: En producción, genera tu propio VAPID key pair:
-        // npx web-push generate-vapid-keys
-        // Por ahora usamos un placeholder — reemplazar con tu clave pública real
-        const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY || ''
+      
+      const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY || ''
 
+      if (!sub) {
         if (!VAPID_PUBLIC_KEY) {
-          console.warn('[FORZA Push] VITE_VAPID_PUBLIC_KEY no configurada.')
-          // Aún así guardamos como "suscrito" para testing local
+          console.warn('[FORZA Push] VITE_VAPID_PUBLIC_KEY no configurada. Usando modo simulación.')
           setSubscribed(true)
           setLoading(false)
           return true
@@ -62,15 +69,18 @@ export function usePushNotifications(userId) {
 
       const subJSON = sub.toJSON()
 
-      // Guardar en Supabase
+      // Guardar o actualizar en Supabase
       if (userId) {
-        await supabaseAuth.from('push_subscriptions').upsert({
+        const { error } = await supabaseAuth.from('push_subscriptions').upsert({
           user_id:       userId,
           endpoint:      subJSON.endpoint,
           p256dh:        subJSON.keys?.p256dh    || '',
           auth_key:      subJSON.keys?.auth      || '',
-          reminder_time: reminderTime,
+          reminder_time: reminderTime, // <--- Ahora se guarda correctamente
+          updated_at:    new Date().toISOString(),
         }, { onConflict: 'endpoint' })
+
+        if (error) throw error
       }
 
       setSubscribed(true)
@@ -85,16 +95,24 @@ export function usePushNotifications(userId) {
 
   async function unsubscribe() {
     setLoading(true)
-    const reg = await navigator.serviceWorker.ready
-    const sub = await reg.pushManager.getSubscription()
-    if (sub) {
-      await sub.unsubscribe()
-      await supabaseAuth.from('push_subscriptions')
-        .delete()
-        .eq('endpoint', sub.endpoint)
+    try {
+      const reg = await navigator.serviceWorker.ready
+      const sub = await reg.pushManager.getSubscription()
+      if (sub) {
+        const endpoint = sub.endpoint
+        await sub.unsubscribe()
+        
+        // Eliminar de Supabase
+        await supabaseAuth.from('push_subscriptions')
+          .delete()
+          .eq('endpoint', endpoint)
+      }
+      setSubscribed(false)
+    } catch (err) {
+      console.error('[FORZA Push] Error al desuscribir:', err)
+    } finally {
+      setLoading(false)
     }
-    setSubscribed(false)
-    setLoading(false)
   }
 
   return { permission, subscribed, loading, subscribe, unsubscribe }
@@ -106,6 +124,8 @@ function urlBase64ToUint8Array(base64String) {
   const base64  = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')
   const rawData = window.atob(base64)
   const output  = new Uint8Array(rawData.length)
-  for (let i = 0; i < rawData.length; ++i) output[i] = rawData.charCodeAt(i)
+  for (let i = 0; i < rawData.length; ++i) {
+    output[i] = rawData.charCodeAt(i)
+  }
   return output
 }

@@ -236,3 +236,10 @@
   padding: 1.1rem 2rem; border-radius: var(--radius-md); border: none; cursor: pointer;
   box-shadow: 0 8px 15px rgba(204, 255, 0, 0.2);
 }
+
+.offlineBadge {
+  font-size: 0.75rem;
+  color: #f59e0b;
+  margin-top: 4px;
+  display: block;
+}

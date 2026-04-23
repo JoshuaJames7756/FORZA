@@ -1,65 +1,91 @@
-// FORZA — Service Worker v1.2 (Protocolo Maestro v3.1)
-// Estrategia: Stale-While-Revalidate + Push Notifications
-
 const CACHE_NAME = 'forza-v1';
 const OFFLINE_URL = '/index.html';
 
-// ── INSTALL: Pre-cache de la estructura base ─────────────────
+// ── INSTALL ───────────────────────────────────────────────────
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll([
-        OFFLINE_URL,
         '/',
+        '/index.html',
         '/manifest.json',
         '/icons/icon-192.png',
-        '/icons/favicon.ico'
+        '/icons/favicon.ico',
       ]);
     })
   );
   self.skipWaiting();
 });
 
-// ── ACTIVATE: Limpieza de caches antiguos ─────────────────────
+// ── ACTIVATE ──────────────────────────────────────────────────
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(
-        keys.map(key => {
-          if (key !== CACHE_NAME) return caches.delete(key);
-        })
-      )
+      Promise.all(keys.map(key => {
+        if (key !== CACHE_NAME) return caches.delete(key);
+      }))
     )
   );
   self.clients.claim();
 });
 
-// ── FETCH: Estrategia Híbrida ─────────────────────────────────
+// ── FETCH ─────────────────────────────────────────────────────
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
+  // Ignorar requests que no son de nuestra app
   if (url.origin !== location.origin) return;
 
+  // Navegación → app shell (index.html)
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request).catch(() => caches.match(OFFLINE_URL))
+      fetch(request)
+        .then(response => {
+          // Cachear el index.html fresco
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+          return response;
+        })
+        .catch(() => caches.match('/index.html'))
     );
     return;
   }
 
+  // Assets con hash (JS, CSS) → Cache First
+  // Son inmutables por el hash, si están en caché son válidos
+  if (
+    url.pathname.startsWith('/assets/') ||
+    url.pathname.endsWith('.js') ||
+    url.pathname.endsWith('.css')
+  ) {
+    event.respondWith(
+      caches.match(request).then(cached => {
+        if (cached) return cached;
+        return fetch(request).then(response => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+          return response;
+        });
+      })
+    );
+    return;
+  }
+
+  // Resto (imágenes, fuentes, etc.) → Stale While Revalidate
   event.respondWith(
     caches.match(request).then(cachedResponse => {
       const fetchPromise = fetch(request).then(networkResponse => {
         if (networkResponse && networkResponse.status === 200) {
-          const cacheCopy = networkResponse.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(request, cacheCopy));
+          const copy = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
         }
         return networkResponse;
       }).catch(() => {
-        if (request.destination === 'image') return caches.match('/icons/icon-192.png');
+        if (request.destination === 'image') {
+          return caches.match('/icons/icon-192.png');
+        }
       });
-
       return cachedResponse || fetchPromise;
     })
   );

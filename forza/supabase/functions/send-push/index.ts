@@ -48,7 +48,7 @@ serve(async (req) => {
     query = query.eq('user_id', body.user_id)
   } else {
     // Enviar solo a quienes tienen recordatorio en esta hora (±5 min)
-    query = query.not('reminder_time', 'is', null)
+    query = query.eq('reminder_time', currentTime)
   }
 
   const { data: subscriptions, error } = await query

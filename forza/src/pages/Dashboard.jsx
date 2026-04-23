@@ -11,7 +11,7 @@ export default function Dashboard() {
 
   const [todaySchedule, setTodaySchedule] = useState(null)
   const [weekSessions, setWeekSessions] = useState(0)
-  const [streak, setStreak] = useState(0) // Puedes vincularlo a tu lógica de racha luego
+  const [streak, setStreak] = useState(0) 
   const [loading, setLoading] = useState(true)
 
   const dayNames = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
@@ -29,7 +29,12 @@ export default function Dashboard() {
   async function fetchDashboardData(userId) {
     setLoading(true)
     try {
-      // 1. Obtener horario de hoy
+      // 1. Sincronizar racha desde el perfil
+      if (profile?.streak_count !== undefined) {
+        setStreak(profile.streak_count)
+      }
+
+      // 2. Obtener horario de hoy
       const { data: schedule } = await supabaseAuth
         .from('user_schedules')
         .select('*, routines(name)')
@@ -38,7 +43,7 @@ export default function Dashboard() {
         .eq('week_label', 'A') // Asumiendo semana A por defecto
         .maybeSingle()
 
-      // 2. Sesiones completadas esta semana
+      // 3. Sesiones completadas esta semana
       const weekStart = getWeekStart()
       const { count } = await supabaseAuth
         .from('workout_sessions')
@@ -210,8 +215,8 @@ function getWeekStart() {
 }
 
 const QUICK_ACTIONS = [
-  { path: '/workout',  icon: '⚡', label: 'Entrenar' },
-  { path: '/diet',     icon: '🥗', label: 'Comidas' },
+  { path: '/workout',     icon: '⚡', label: 'Entrenar' },
+  { path: '/diet',      icon: '🥗', label: 'Comidas' },
   { path: '/progress', icon: '📈', label: 'Progreso' },
   { path: '/calendar', icon: '📅', label: 'Mi Plan' },
 ]
